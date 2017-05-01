@@ -6,5 +6,5 @@ HTML
 CSS
 Javascript
 
-##Live preview aviable at
+## Live preview aviable at
 moondas.github.io/Boss-Puzzle-game
