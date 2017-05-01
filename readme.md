@@ -7,4 +7,4 @@ CSS
 Javascript
 
 ## Live preview aviable at
-moondas.github.io/Boss-Puzzle-game
+https://moondas.github.io/Boss-Puzzle-game
