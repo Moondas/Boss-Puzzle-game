@@ -2,9 +2,9 @@
 Simple Boss Puzzle game
 
 ## Built with
-HTML
-CSS
-Javascript
+- HTML5
+- CSS3
+- JavaScript
 
 ## Live preview aviable at
 https://moondas.github.io/Boss-Puzzle-game
