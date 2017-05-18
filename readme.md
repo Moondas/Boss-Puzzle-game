@@ -5,6 +5,7 @@ Simple Boss Puzzle game
 - HTML5
 - CSS3
 - JavaScript
+- JSBin
 
-## Live preview aviable at
+## Live preview available at
 https://moondas.github.io/Boss-Puzzle-game
