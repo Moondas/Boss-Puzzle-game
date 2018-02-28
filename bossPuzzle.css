@@ -1,28 +1,29 @@
 body {
-  margin: 0;
-  height: 100vh;
+  background: whitesmoke;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100vh;
+  margin: 0;
 }
 
 #board {
-  border: 1px solid silver;
+  position: relative;
   width: 360px;
   height: 360px;
+  border: 1px solid silver;
   padding: -2px 0 0 -2px;
   box-shadow: 1px 1px 3px 3px silver;
   overflow: hidden;
-  position: relative;
 }
 
 .block {
+  position: absolute;
+  display: grid;
   width: 117px;
   height: 117px;
-  display: grid;
   border: 1px transparent solid;
-  position: absolute;
-  /*z-index: 0;*/
+  user-select: none;
   
   /* Font style */
   line-height: 110px;
@@ -39,12 +40,10 @@ body {
   border-color: goldenrod;
   margin: 1px 0 0 1px;
   cursor: pointer;
-  box-shadow: 1px 1px 2px 2px #CCC/*rgba(204,204,204,.5)*/; 
-  border-radius: 3px;
-  
+  box-shadow: 1px 1px 2px 2px #CCC; 
+  border-radius: 3px;  
 }
 
 #b-0 {
-  color: transparent;
-  
+  color: transparent;  
 }

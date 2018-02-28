@@ -1,90 +1,92 @@
 board = document.getElementById("board");
 layout = [1, 2, 3, 4, 5, 6, 7, 8, 0]; /* Don't remove zero */
-w = 120; /* Block's side size */
+sideLength = 120; /* Block's side size */
 align = 0;
 
-board.onclick = function (e) {
-  e = e || event || window.event;
-  var src = e.srcElement || e.target,
-      id = src.id;
-  if (id[2]>0) replacer(id);
+board.onclick = function (event) {
+  event = event || window.event;
+  var source = event.srcElement || event.target;
+  if (source.id[2] > 0) {
+    replacer(source.id);
+  }
 };
 
 function hasABlocks(num) {
-  for (var i = 0; i < layout.length; i++) {
-    if (layout[i] == num) return true;
-  }
-  
-  return false;
+  return layout.indexOf(num) > -1;
 }
 
-function mixBlocks() {
-  var rnd;
+function randomizeBlocks() {
+  var rand;
   layout = [];
-  /* alert(layout.length);*/
   while (layout.length < 8) {
-    rnd = Math.floor(Math.random()*8)+1;
-    if (!hasABlocks(rnd)) layout.push(rnd);
+    rand = Math.floor(Math.random() * 8) + 1;
+    if (!hasABlocks(rand)) {
+      layout.push(rand);
+    }
   }
   layout.push(0); /* The zero is always the last one */
+  console.log(layout);
 }
 
-function makeBlocks() {
+function renderBlocks() {
   board.innerHTML = "";
-  
+
   for (var i = 0; i < layout.length; i++) { /* Fill the board */
-    board.innerHTML += '<div class="block" id="b-' + layout[i] + '" style="top: ' + (align + Math.floor(i/3)*w) + 'px; left: ' + (align + Math.floor(i%3)*w) + 'px">' + layout[i] + '</div>';
+    board.innerHTML +=
+      '<div class="block" id="b-' + layout[i] + '" style="top: ' + 
+        (align + Math.floor(i / 3) * sideLength) + 'px; left: ' +
+        (align + Math.floor(i % 3) * sideLength) + 'px">' + layout[i] +
+      '</div>';
   }
 }
 
-function isNeighbour(which){
-  var a = document.getElementById(which), /* Which is want to move */
-      n = document.getElementById("b-0"), /* 0 */
-      posA = {x:parseInt(a.style.left), y:parseInt(a.style.top)},
-      posN = {x:parseInt(n.style.left), y:parseInt(n.style.top)};
-  
-  if ( (posA.x == posN.x && (posA.y + w >= posN.y) && (posA.y - w <= posN.y)) || (posA.y == posN.y && (posA.x + w >= posN.x) && (posA.x - w <= posN.x))) {
+function isNeighbour(which) {
+  var active = document.getElementById(which); /* Which is want to move */
+  var block0 = document.getElementById("b-0"); /* 0 */
+  var posActive = { x: parseInt(active.style.left), y: parseInt(active.style.top) };
+  var posBlock0 = { x: parseInt(block0.style.left), y: parseInt(block0.style.top) };
+
+  if (
+    (posActive.x == posBlock0.x && (posActive.y + sideLength >= posBlock0.y) && (posActive.y - sideLength <= posBlock0.y)) ||
+    (posActive.y == posBlock0.y && (posActive.x + sideLength >= posBlock0.x) && (posActive.x - sideLength <= posBlock0.x))
+  ) {
     return true;
   }
 }
 
 function replacer(which) {
-  var a = document.getElementById(which), /* Which is want to move */
-      n = document.getElementById("b-0"), /* 0 */
-      posA = {x:parseInt(a.style.left), y:parseInt(a.style.top)},
-      posN = {x:parseInt(n.style.left), y:parseInt(n.style.top)},
-      tmp = [n.style.top, n.style.left], tmpO;
-  
+  var active = document.getElementById(which); /* Which is want to move */
+  var block0 = document.getElementById("b-0"); /* 0 */
+  var posActive = { x: parseInt(active.style.left), y: parseInt(active.style.top) };
+  var posBlock0 = { x: parseInt(block0.style.left), y: parseInt(block0.style.top) };
+  var tmp = [ block0.style.top, block0.style.left ]
+  var tmpO;
+
   if (isNeighbour(which)) {
     /* Because the shadow is... */
-    setTimeout(function() {
-    if (posA.x == posN.x) {
-        tmpO = a.nextSibling;
-        board.insertBefore(a, n);
-        board.insertBefore(n, tmpO);
-    }
+    setTimeout(function () {
+      if (posActive.x == posBlock0.x) {
+        tmpO = active.nextSibling;
+        board.insertBefore(active, block0);
+        board.insertBefore(block0, tmpO);
+      }
     }, 300);
-    
-    if (posA.y == posN.y) {
-       if (posA.x > posN.x) board.insertBefore(n,a.nextSibling);
-        else board.insertBefore(n,a);
+
+    if (posActive.y == posBlock0.y) {
+      if (posActive.x > posBlock0.x) {
+        board.insertBefore(block0, active.nextSibling);
+      }
+      else {
+        board.insertBefore(block0, active);
+      }
     }
-        
-    /*if (posA.y < posN.y) a.style.zIndex++;*/
-    
-    /* alert("I like to move it!"); */
-    
-    n.style.top = a.style.top;
-    n.style.left = a.style.left;
-    a.style.top = tmp[0];
-    a.style.left = tmp[1];
-    
-    /*if (posA.y > posN.y && a.style.zIndex > 0) {
-      a.style.zIndex--;
-    }*/
+
+    block0.style.top = active.style.top;
+    block0.style.left = active.style.left;
+    active.style.top = tmp[0];
+    active.style.left = tmp[1];
   }
 }
 
-mixBlocks();
-
-makeBlocks();
+randomizeBlocks();
+renderBlocks();
