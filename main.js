@@ -1,5 +1,5 @@
 board = document.getElementById("board");
-layout = [1, 2, 3, 4, 5, 6, 7, 8, 0]; /* Don't remove zero */
+layout = []; /* Zero is means: empty field */
 sideLength = 120; /* Block's side size */
 align = 0;
 
@@ -17,7 +17,6 @@ function hasABlocks(num) {
 
 function randomizeBlocks() {
   var rand;
-  layout = [];
   while (layout.length < 8) {
     rand = Math.floor(Math.random() * 8) + 1;
     if (!hasABlocks(rand)) {
@@ -33,9 +32,9 @@ function renderBlocks() {
 
   for (var i = 0; i < layout.length; i++) { /* Fill the board */
     board.innerHTML +=
-      '<div class="block" id="b-' + layout[i] + '" style="top: ' + 
-        (align + Math.floor(i / 3) * sideLength) + 'px; left: ' +
-        (align + Math.floor(i % 3) * sideLength) + 'px">' + layout[i] +
+      '<div class="block" id="b-' + layout[i] + '" style="top: ' +
+      (align + Math.floor(i / 3) * sideLength) + 'px; left: ' +
+      (align + Math.floor(i % 3) * sideLength) + 'px">' + layout[i] +
       '</div>';
   }
 }
@@ -59,7 +58,7 @@ function replacer(which) {
   var block0 = document.getElementById("b-0"); /* 0 */
   var posActive = { x: parseInt(active.style.left), y: parseInt(active.style.top) };
   var posBlock0 = { x: parseInt(block0.style.left), y: parseInt(block0.style.top) };
-  var tmp = [ block0.style.top, block0.style.left ]
+  var tmp = [ block0.style.top, block0.style.left ];
   var tmpO;
 
   if (isNeighbour(which)) {
