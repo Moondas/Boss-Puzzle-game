@@ -1,11 +1,6 @@
-# Boss-Puzzle-game
+# Simple Boss Puzzle game
 Simple Boss Puzzle game
 
-## Built with
-- HTML5
-- CSS3
-- JavaScript
-- JSBin
+## Built with: HTML5, CSS3, JavaScript, JSBin, &hearts;
 
-## Live preview available at
-https://moondas.github.io/Boss-Puzzle-game
+[Try it!](https://moondas.github.io/Boss-Puzzle-game/)

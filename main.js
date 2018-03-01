@@ -5,99 +5,87 @@
  * and it's default location is a bottom left corner
  */
 
-var config = {
+var game = {
+  config: {
+    sideLength: 120,
+    align: 0,
+  },
   board: document.getElementById("board"),
-  layout: [],
-  sideLength: 120,
-  align: 0,
-};
+  selected: null,
+  empty: null,
+  posSelected: {
+    x: "",
+    y: ""
+  },
+  posEmpty: {
+    x: "",
+    y: ""
+  },
+  init: function() {
+    board.onclick = function(event) {
+      event = event || window.event;
+      game.selected = event.srcElement || event.target;
+      if (game.selected.id[2] > 0) {
+        game.empty = document.querySelector("#b-0");
+        game.posSelected.x = parseInt(game.selected.style.left);
+        game.posSelected.y = parseInt(game.selected.style.top);
+        game.posEmpty.x = parseInt(game.empty.style.left);
+        game.posEmpty.y = parseInt(game.empty.style.top);
 
-function createMixedBlocks() {
-  var block;
-  var lastInsertedId = -1;
-  var layout = config.layout;
-  var align = config.align;
-  var sideLength = config.sideLength;
+        game.replacer();
+      }
+    };
+    game.createMixedBlocks();
+  },
+  createMixedBlocks: function() {
+    var block;
+    var lastInsertedId = -1;
+    var layout = [];
 
-  while (layout.length < 9) {
-    /* The zero is always the last one */
-    block = layout.length != 8 ? Math.floor(Math.random() * 8) + 1 : 0;
-    if (layout.indexOf(block) == -1) {
-      lastInsertedId = layout.push(block) - 1;
-      board.innerHTML +=
-        '<div class="block" id="b-' + layout[lastInsertedId] + '" style="top: ' +
-        (align + Math.floor(lastInsertedId / 3) * sideLength) + 'px; left: ' +
-        (align + Math.floor(lastInsertedId % 3) * sideLength) + 'px">' + layout[lastInsertedId] +
-        '</div>';
+    while (layout.length < 9) {
+      /* The zero is always the last one */
+      block = layout.length != 8 ? Math.floor(Math.random() * 8) + 1 : 0;
+      if (layout.indexOf(block) == -1) {
+        lastInsertedId = layout.push(block) - 1;
+        game.board.innerHTML +=
+          '<div class="block" id="b-' + layout[lastInsertedId] + '" style="top: ' +
+          (game.config.align + Math.floor(lastInsertedId / 3) * game.config.sideLength) + 'px; left: ' +
+          (game.config.align + Math.floor(lastInsertedId % 3) * game.config.sideLength) + 'px">' + layout[lastInsertedId] +
+          '</div>';
+      }
+    }
+  },
+  isInterchangeable: function() {
+    if (
+      (game.posSelected.x == game.posEmpty.x && (game.posSelected.y + game.config.sideLength >= game.posEmpty.y) && (game.posSelected.y - game.config.sideLength <= game.posEmpty.y)) ||
+      (game.posSelected.y == game.posEmpty.y && (game.posSelected.x + game.config.sideLength >= game.posEmpty.x) && (game.posSelected.x - game.config.sideLength <= game.posEmpty.x))
+    ) {
+      return true;
+    }
+    return false;
+  },
+  replacer: function() {
+    if (game.isInterchangeable()) {
+      if (game.posSelected.x == game.posEmpty.x) {
+        /* Because the shadow is... */
+        setTimeout(function() {
+          var selectedAfter = game.selected.nextSibling;
+          game.board.insertBefore(game.selected, game.empty);
+          game.board.insertBefore(game.empty, game.selectedAfter);
+        }, 300);
+      }
+      if (game.posSelected.y == game.posEmpty.y) {
+        if (game.posSelected.x > game.posEmpty.x) {
+          game.board.insertBefore(game.empty, game.selected.nextSibling);
+        } else {
+          game.board.insertBefore(game.empty, game.selected);
+        }
+      }
+      game.empty.style.top = game.selected.style.top;
+      game.empty.style.left = game.selected.style.left;
+      game.selected.style.top = game.posEmpty.y + "px";
+      game.selected.style.left = game.posEmpty.x + "px";
     }
   }
 }
-
-function isNeighbour(which) {
-  var selected = document.getElementById(which); /* Which is want to move */
-  var empty = document.getElementById("b-0");
-  var posSelected = {
-    x: parseInt(selected.style.left),
-    y: parseInt(selected.style.top)
-  };
-  var posEmpty = {
-    x: parseInt(empty.style.left),
-    y: parseInt(empty.style.top)
-  };
-  var sideLength = config.sideLength;
-
-  if (
-    (posSelected.x == posEmpty.x && (posSelected.y + sideLength >= posEmpty.y) && (posSelected.y - sideLength <= posEmpty.y)) ||
-    (posSelected.y == posEmpty.y && (posSelected.x + sideLength >= posEmpty.x) && (posSelected.x - sideLength <= posEmpty.x))
-  ) {
-    return true;
-  }
-}
-
-function replacer(which) {
-  var selected = document.getElementById(which); /* Which is want to move */
-  var empty = document.getElementById("b-0");
-  var posSelected = {
-    x: selected.style.left,
-    y: selected.style.top
-  };
-  var posEmpty = {
-    x: empty.style.left,
-    y: empty.style.top
-  };
-
-  if (isNeighbour(which)) {
-    /* Because the shadow is... */
-    setTimeout(function () {
-      if (posSelected.x == posEmpty.x) {
-        var selectedAfter = selected.nextSibling;
-        board.insertBefore(selected, empty);
-        board.insertBefore(empty, selectedAfter);
-      }
-    }, 300);
-
-    if (posSelected.y == posEmpty.y) {
-      if (posSelected.x > posEmpty.x) {
-        board.insertBefore(empty, selected.nextSibling);
-      }
-      else {
-        board.insertBefore(empty, selected);
-      }
-    }
-
-    empty.style.top = selected.style.top;
-    empty.style.left = selected.style.left;
-    selected.style.top = posEmpty.y;
-    selected.style.left = posEmpty.x;
-  }
-}
-
-board.onclick = function (event) {
-  event = event || window.event;
-  var source = event.srcElement || event.target;
-  if (source.id[2] > 0) {
-    replacer(source.id);
-  }
-};
-
-createMixedBlocks();
+game.init();
