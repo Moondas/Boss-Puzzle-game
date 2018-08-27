@@ -1,10 +1,11 @@
 /**
  * This is a very simple Boss puzzle board game
- * 
+ */
+
+/**
  * Zero is always means an empty cell,
  * and it's default location is a bottom left corner
  */
-
 var game = {
   config: {
     sideLength: 120,
@@ -71,7 +72,7 @@ var game = {
         setTimeout(function() {
           var selectedAfter = game.selected.nextSibling;
           game.board.insertBefore(game.selected, game.empty);
-          game.board.insertBefore(game.empty, game.selectedAfter);
+          game.board.insertBefore(game.empty, selectedAfter);
         }, 300);
       }
       if (game.posSelected.y == game.posEmpty.y) {
